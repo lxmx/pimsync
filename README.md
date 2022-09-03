@@ -1,6 +1,12 @@
 # PIMSync
 
+<a alt="Palm OS >= 4.0">
+  <img src="https://img.shields.io/badge/Palm%20OS-%3E%3D%204.0-blue" />
+</a>
+
 This simple Palm OS app allows you to export the built-in Memo Pad, Date Book, Address and To Do List databases to the memory card at the `/PIMSync` location - or import them back, replacing the RAM databases.
+
+<img src="https://raw.githubusercontent.com/lxmx/pimsync/master/screenshot.png"/>
 
 ## Workflow
 

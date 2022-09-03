@@ -1,0 +1,23 @@
+/* pilrc generated file.  Do not edit!*/
+#define AboutVersionLabel 1022
+#define AboutDescriptionLabel 1021
+#define AboutOKButton 1020
+#define AboutForm 1019
+#define DEBUG_ALERT 1018
+#define DELETE_ALERT 1017
+#define MainHelpButton 1016
+#define MainFromSDSubtitleLabel 1015
+#define MainFromSDTitleLabel 1014
+#define MainFromSDButton 1013
+#define MainToSDSubtitleLabel 1012
+#define MainToSDTitleLabel 1011
+#define MainToSDButton 1010
+#define MainSubtitleLabel 1009
+#define MainTitleLabel 1008
+#define MainForm 1007
+#define RomIncompatibleAlert 1006
+#define OptionsAbout 1005
+#define MainMenuBar 1004
+#define ToSDBitmapFamily 1003
+#define FromSDBitmapFamily 1002
+#define PIMSyncBitmapFamily 1001

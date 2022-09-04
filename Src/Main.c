@@ -270,7 +270,7 @@ static void CopyFromSDDir( UInt16 volRefNum, Char* dir, Messager Message, UInt32
 
             Char fileMsg[30];
             StrPrintF(fileMsg, "Copied %s", fileName);
-            StatusMessage(fileMsg, 0);
+            Message(fileMsg, 0);
 
             err = DmDatabaseInfo( card, id, NULL, &attr, NULL, &crDate,
                       &modDate, NULL, NULL, NULL, NULL, NULL, NULL );
@@ -311,14 +311,13 @@ static void CopyFromSDDir( UInt16 volRefNum, Char* dir, Messager Message, UInt32
             if ( copiedP != NULL )
                 *copiedP = true;
         }
-
-        VFSFileDelete( volRefNum, fileName );
     }
+    Message("Done", cookie);
 }
 
 static void StatusMessage( const Char* s, UInt32 cookie )
 {
-    RectangleType display = { { 10, 120 }, { 140, 20 } };
+    RectangleType display = { { 10, 120 }, { 150, 20 } };
     WinEraseRectangle( &display, 0 );
 
     Char statusMsg[50];
@@ -348,7 +347,7 @@ void CopyToSD( UInt16 vol, Messager Message, UInt32 cookie, Boolean* copiedP, Bo
             for ( UInt32 i = 0; i < NUM_DBS; i++) {
               copyDBToCard ( volRefNum, dbsToCopy[i], "Copying", i, NUM_DBS);
             }
-            StatusMessage("Done", 0);
+            Message("Done", 0);
         }
     }
 }

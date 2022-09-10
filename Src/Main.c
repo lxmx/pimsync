@@ -30,16 +30,23 @@ static Boolean MainFormDoCommand(UInt16 command)
 			break;
 		}
 
+		case OptionsWipe:
+		{
+			HandleWipe();
+			handled = true;
+			break;
+		}
+
 		case MainFromSDButton:
 		{
-			handleFromSD();
+			HandleFromSD();
 			handled = true;
 			break;
 		}
 
 		case MainToSDButton:
 		{
-			handleToSD();
+			HandleToSD();
 			handled = true;
 			break;
 		}
@@ -179,9 +186,8 @@ static void CopyFromSDDir( UInt16 volRefNum, Char* dir, Messager Message, UInt32
         UInt32   type;
         Char     dbName[ dmDBNameLength ];
         Char     fileName[ MAX_FILENAME ];
-        LocalID  id;
         UInt16   card;
-        Int16    i;
+        LocalID  id;
 
         err = VFSDirEntryEnumerate( dirRef, &iterator, &info );
 
@@ -225,39 +231,7 @@ static void CopyFromSDDir( UInt16 volRefNum, Char* dir, Messager Message, UInt32
 
         VFSFileClose( fileRef );
 
-        for ( i = MemNumCards() - 1 ; 0 <= i ; i-- ) {
-             id = DmFindDatabase( i, dbName );
-             if ( id != NULL ) {
-
-                 if ( errNone != DmDeleteDatabase( i, id ) ) {
-                     SysNotifyDBInfoType d;
-                     Boolean deleted = false;
-
-                     if ( errNone == DmDatabaseInfo( i, id, d.dbName, &( d.attributes ), NULL, NULL,
-                               NULL, NULL, NULL, NULL, NULL, &d.type, &d.creator ) ) {
-                         SysNotifyParamType  n;
-
-                         MemSet( &n, sizeof( n ), 0 );
-                         n.notifyType  = sysNotifyDeleteProtectedEvent;
-                         n.broadcaster = appFileCreator;
-                         d.dbID = id;
-                         d.cardNo = i;
-                         n.notifyDetailsP = &d;
-
-                         SysNotifyBroadcast( &n );
-
-                         if ( errNone == DmDeleteDatabase( i, id ) ) {
-                             deleted = true;;
-                         }
-                     }
-                     if ( ! deleted ) {
-                         if ( missingP != NULL )
-                             *missingP = true;
-                         continue;
-                     }
-                 }
-             }
-        }
+        DeleteDB(dbName, missingP);
 
         err = VFSImportDatabaseFromFile(
                   volRefNum,
@@ -376,7 +350,57 @@ void CopyFromSD( UInt16 vol, Messager Message, UInt32 cookie, Boolean* copiedP, 
     }
 }
 
-void handleFromSD()
+void DeleteDB( Char* dbName, Boolean* missingP )
+{
+    LocalID  id;
+    Int16    i;
+
+    for ( i = MemNumCards() - 1 ; 0 <= i ; i-- ) {
+        id = DmFindDatabase( i, dbName );
+        if ( id != NULL ) {
+
+          if ( errNone != DmDeleteDatabase( i, id ) ) {
+                SysNotifyDBInfoType d;
+                Boolean deleted = false;
+
+                if ( errNone == DmDatabaseInfo( i, id, d.dbName, &( d.attributes ), NULL, NULL,
+                          NULL, NULL, NULL, NULL, NULL, &d.type, &d.creator ) ) {
+                    SysNotifyParamType  n;
+
+                    MemSet( &n, sizeof( n ), 0 );
+                    n.notifyType  = sysNotifyDeleteProtectedEvent;
+                    n.broadcaster = appFileCreator;
+                    d.dbID = id;
+                    d.cardNo = i;
+                    n.notifyDetailsP = &d;
+
+                    SysNotifyBroadcast( &n );
+
+                    if ( errNone == DmDeleteDatabase( i, id ) ) {
+                        deleted = true;;
+                    }
+                }
+                if ( ! deleted ) {
+                    if ( missingP != NULL )
+                        *missingP = true;
+                    continue;
+                }
+            }
+        }
+    }
+}
+
+void WipeInRAM( Messager Message, UInt32 cookie, Boolean* missingP )
+{
+    Char *dbsToWipe[NUM_DBS+1] = DBS_TO_COPY;
+
+    for ( UInt32 i = 0; i < NUM_DBS; i++) {
+      DeleteDB(dbsToWipe[i], missingP);
+    }
+    Message("Wiped", cookie);
+}
+
+void HandleFromSD()
 {
     Boolean copied;
     Boolean missing;
@@ -388,11 +412,22 @@ void handleFromSD()
     }
 }
 
-void handleToSD()
+void HandleToSD()
 {
     Boolean copied;
     Boolean missing;
     StatusMessage("Copying the PIM files...", 0);
     CopyToSD( ALL_VOLUMES, StatusMessage, 0, &copied, &missing );
+}
+
+void HandleWipe()
+{
+    UInt8 selection;
+    Boolean missing;
+
+    selection = FrmAlert( WIPE_ALERT );
+    if ( selection == 0 ) {
+      WipeInRAM(StatusMessage, 0, &missing);
+    }
 }
 

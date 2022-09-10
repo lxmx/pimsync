@@ -20,7 +20,7 @@
 
 #define appFileCreator			'PIMS'
 #define appName					"PIMSync"
-#define appVersionNum			0x01
+#define appVersionNum			0x03
 #define appPrefID				0x00
 #define appPrefVersionNum		0x01
 
@@ -33,9 +33,15 @@ Boolean MainFormHandleEvent(EventType * eventP);
 void OpenAboutDialog();
 
 #define ALL_VOLUMES 0xFFFF
+
 typedef void (*Messager)( const Char* s, UInt32 cookie );
 static void StatusMessage( const Char* s, UInt32 cookie );
+
 static void CopyFromSDDir( UInt16 volRefNum, Char* dir, Messager Message, UInt32 cookie, Boolean* copiedP, Boolean* missingP );
 void CopyToSD( UInt16 vol, Messager Message, UInt32 cookie, Boolean* copiedP, Boolean* missingP );
-void handleFromSD();
-void handleToSD();
+void WipeInRAM( Messager Message, UInt32 cookie, Boolean* missingP );
+void DeleteDB( Char* dbName, Boolean* missingP );
+
+void HandleFromSD();
+void HandleToSD();
+void HandleWipe();

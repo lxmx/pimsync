@@ -8,7 +8,7 @@ DATA "code" ID 1 "code0001.bin"
 GENERATEHEADER "Rsc/PIMSync_Rsc.h"
 
 APPLICATIONICONNAME ID 1000 "PIMSync"
-VERSION ID 1 "0.2"
+VERSION ID 1 "0.3"
 
 RESETAUTOID 1000
 
@@ -30,11 +30,15 @@ END
 
 MENU ID MainMenuBar
 BEGIN
-	PULLDOWN "Options"
+	PULLDOWN "Danger"
 	BEGIN
-		MENUITEM "About" ID OptionsAbout
+		MENUITEM "Wipe PIM in RAM" ID OptionsWipe
 	END
 
+	PULLDOWN "About"
+	BEGIN
+		MENUITEM "Help" ID OptionsAbout
+	END
 END
 
 ALERT ID RomIncompatibleAlert
@@ -73,6 +77,14 @@ BEGIN
   BUTTONS  "Yes" "No"
 END
 
+ALERT ID WIPE_ALERT
+WARNING
+BEGIN
+  TITLE "Danger"
+  MESSAGE  "This will DELETE all the memos, todos, addresses and datebook records in RAM! Are you mad?"
+  BUTTONS  "Yes, continue" "No, cancel"
+END
+
 ALERT ID DEBUG_ALERT
 CONFIRMATION
 BEGIN
@@ -89,6 +101,6 @@ BEGIN
 	BUTTON "OK" ID AboutOKButton AT (55 142 40 12)
 	FORMBITMAP AT (50 86) BITMAP PIMSyncBitmapFamily
 	LABEL "PIMSync allows you to use the SD\rcard to transfer the memo, address\rbook, todo and datebook databases\rfrom your Palm OS device and back.\rYou can use this workflow with\rprograms like J-Pilot on the PC." ID AboutDescriptionLabel  AT (5 16)
-	LABEL "V: 0.2" ID AboutVersionLabel  AT (132 145)
+	LABEL "V: 0.3" ID AboutVersionLabel  AT (132 145)
 END
 

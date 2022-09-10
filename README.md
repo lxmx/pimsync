@@ -14,6 +14,8 @@ The above makes sense if you are using J-Pilot on your desktop, and don't want t
 
 J-Pilot operates on the very same `MemoDB.pdb`, `ToDoDB.pdb`, `DatebookDB.pdb`, `AddressDB.pdb` files you have on your Palm. Which means you can edit the records, then save them back to the device. 
 
+See `pimsync.example.sh` for an example sync script.
+
 ## Thanks
 
 * Alexander Pruss for [MyInstall](https://www.pruss.mobi/dl/) with its VFS code.

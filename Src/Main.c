@@ -37,6 +37,13 @@ static Boolean MainFormDoCommand(UInt16 command)
 			break;
 		}
 
+		case OptionsHardReset:
+		{
+			HandleHardReset();
+			handled = true;
+			break;
+		}
+
 		case MainFromSDButton:
 		{
 			HandleFromSD();
@@ -428,6 +435,16 @@ void HandleWipe()
     selection = FrmAlert( WIPE_ALERT );
     if ( selection == 0 ) {
       WipeInRAM(StatusMessage, 0, &missing);
+    }
+}
+
+void HandleHardReset()
+{
+    UInt8 selection;
+
+    selection = FrmAlert( RESET_ALERT );
+    if ( selection == 0 ) {
+      SysColdBoot (0, 0, 0, 0, 0);
     }
 }
 

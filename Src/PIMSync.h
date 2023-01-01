@@ -45,3 +45,4 @@ void DeleteDB( Char* dbName, Boolean* missingP );
 void HandleFromSD();
 void HandleToSD();
 void HandleWipe();
+void HandleHardReset();

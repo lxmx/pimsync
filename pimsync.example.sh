@@ -3,10 +3,10 @@
 # DISCLAIMER: This script comes without any warranty.
 # It works for me but may not work for you. Back your data up first!
 
-CARD_DIR="/run/media/$USER/palmOne 128"
 JPILOT_DIR="$HOME/.jpilot"
 
-ps_dir="$CARD_DIR/PIMSync"
+card_dir="$(readlink -f "$1")"
+ps_dir="$card_dir/PIMSync"
 
 for i in AddressDB DatebookDB MemoDB ToDoDB; do
   pdb_file="$i".pdb
@@ -25,7 +25,7 @@ for i in AddressDB DatebookDB MemoDB ToDoDB; do
     cp "$ps_dir"/$pdb_file "$JPILOT_DIR"/pimsync_backup_card
 
     # Merge local changes into card versions
-    echo -e "\nMerging $pdb_file:"
+    printf "\nMerging %s:" "$pdb_file"
     jpilot-merge "$ps_dir"/$pdb_file "$JPILOT_DIR"/$pc3_file \
       "$JPILOT_DIR"/$pdb_file
     rm "$JPILOT_DIR"/$pc3_file
